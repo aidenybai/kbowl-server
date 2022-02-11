@@ -6,7 +6,9 @@ const express = require('express');
 const morgan = require('morgan');
 const app = express();
 const server = require('http').createServer(app);
-const io = require('socket.io')(server);
+const io = require('socket.io')(server, {
+  cors: {},
+});
 
 io.on('connection', (socket) => {
   console.log('A connection was established');
