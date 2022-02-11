@@ -15,11 +15,11 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('A connection was disconnected');
   });
-  socket.on('client-buzz', (data) => {
-    io.emit('server-buzz', data);
+  socket.on('request-buzz', (data) => {
+    io.emit('display-buzz', data);
   });
-  socket.on('client-score', (data) => {
-    io.emit('server-score', data);
+  socket.on('update-score', (data) => {
+    io.emit('display-score', data);
   });
 });
 
