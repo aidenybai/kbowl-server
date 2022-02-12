@@ -21,7 +21,6 @@ function getByValue(searchValue) {
 io.on('connection', (socket) => {
   console.log('A connection was established');
   socket.on('disconnecting', () => {
-    console.log(socket.client.id, [...pool.values()]);
     if ([...pool.values()].includes(socket.client.id)) {
       pool.delete(getByValue(socket.client.id));
       console.log(
