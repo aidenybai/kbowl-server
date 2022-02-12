@@ -10,16 +10,21 @@ const io = require('socket.io')(server, {
   cors: { origin: '*' },
 });
 
-const pool = new Set();
+const pool = new Map();
 
 io.on('connection', (socket) => {
   console.log('A connection was established');
   socket.on('disconnect', () => {
+    if (Object.values(pool).includes(socket.id)) {
+      pool.delete(data.room);
+      console.log(`${data.id} unclaimed ${data.room}`);
+      console.log(`Current sessions (${pool.size}): ${[...pool].join(', ')}`);
+    }
     console.log('A connection was disconnected');
   });
   socket.on('claim-room', (data) => {
     const canAdd = !pool.has(data.room);
-    if (canAdd) pool.add(data.room);
+    if (canAdd) pool.set(data.room, data.id);
     io.emit('confirm-room', { canAdd, id: data.id });
     console.log(`${data.id} claimed ${data.room}`);
     console.log(`Current sessions (${pool.size}): ${[...pool].join(', ')}`);
