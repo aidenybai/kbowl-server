@@ -12,12 +12,18 @@ const io = require('socket.io')(server, {
 
 const pool = new Map();
 
+function getByValue(map, searchValue) {
+  for (let [key, value] of map.entries()) {
+    if (value === searchValue) return key;
+  }
+}
+
 io.on('connection', (socket) => {
   console.log('A connection was established');
   socket.on('disconnect', () => {
-    if (Object.values(pool).includes(socket.id)) {
-      pool.delete(data.room);
-      console.log(`${data.id} unclaimed ${data.room}`);
+    if (pool.values().includes(socket.id)) {
+      pool.delete(getByValue(socket.io));
+      console.log(`${socket.id} unclaimed ${getByValue(socket.io)}`);
       console.log(`Current sessions (${pool.size}): ${[...pool].join(', ')}`);
     }
     console.log('A connection was disconnected');
