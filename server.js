@@ -12,8 +12,8 @@ const io = require('socket.io')(server, {
 
 const pool = new Map();
 
-function getByValue(map, searchValue) {
-  for (const [key, value] of map.entries()) {
+function getByValue(searchValue) {
+  for (const [key, value] of pool.entries()) {
     if (value === searchValue) return key;
   }
 }
@@ -23,7 +23,7 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     if ([...pool.values()].includes(socket.id)) {
       pool.delete(getByValue(socket.io));
-      console.log(`${socket.id} unclaimed ${getByValue(pool, socket.io)}`);
+      console.log(`${socket.id} unclaimed ${getByValue(socket.id)}`);
       console.log(
         `Current sessions (${pool.size}): ${[...pool.keys()].join(', ')}`
       );
