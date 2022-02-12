@@ -20,7 +20,7 @@ function getByValue(searchValue) {
 
 io.on('connection', (socket) => {
   console.log('A connection was established');
-  socket.on('disconnect', () => {
+  socket.on('disconnecting', () => {
     if ([...pool.values()].includes(socket.id)) {
       pool.delete(getByValue(socket.io));
       console.log(`${socket.id} unclaimed ${getByValue(socket.id)}`);
@@ -28,6 +28,8 @@ io.on('connection', (socket) => {
         `Current sessions (${pool.size}): ${[...pool.keys()].join(', ')}`
       );
     }
+  });
+  socket.on('disconnect', () => {
     console.log('A connection was disconnected');
   });
   socket.on('claim-room', (data) => {
