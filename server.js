@@ -10,10 +10,20 @@ const io = require('socket.io')(server, {
   cors: { origin: '*' },
 });
 
+const pool = new Set();
+
 io.on('connection', (socket) => {
   console.log('A connection was established');
   socket.on('disconnect', () => {
     console.log('A connection was disconnected');
+  });
+  socket.on('claim-room', (data) => {
+    const canAdd = !pool.has(data.room);
+    if (canAdd) pool.add(data.room);
+    io.emit('confirm-room', canAdd);
+  });
+  socket.on('unclaim-room', (data) => {
+    pool.delete(data.room);
   });
   socket.on('request-buzz', (data) => {
     io.emit('display-buzz', data);
