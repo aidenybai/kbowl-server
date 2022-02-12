@@ -38,16 +38,16 @@ io.on('connection', (socket) => {
   });
   socket.on('claim-room', (data) => {
     const canAdd = !pool.has(data.room);
-    if (canAdd) pool.set(data.room, data.id);
-    io.emit('confirm-room', { canAdd, id: data.id });
-    console.log(`${data.id} claimed ${data.room}`);
+    if (canAdd) pool.set(data.room, socket.client.id);
+    io.emit('confirm-room', { canAdd, id: socket.client.id });
+    console.log(`${socket.client.id} claimed ${data.room}`);
     console.log(
       `Current sessions (${pool.size}): ${[...pool.keys()].join(', ')}`
     );
   });
   socket.on('unclaim-room', (data) => {
     pool.delete(data.room);
-    console.log(`${data.id} unclaimed ${data.room}`);
+    console.log(`${socket.client.id} unclaimed ${data.room}`);
     console.log(
       `Current sessions (${pool.size}): ${[...pool.keys()].join(', ')}`
     );
