@@ -23,7 +23,7 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     if ([...pool.values()].includes(socket.id)) {
       pool.delete(getByValue(socket.io));
-      console.log(`${socket.id} unclaimed ${getByValue(socket.io)}`);
+      console.log(`${socket.id} unclaimed ${getByValue(pool, socket.io)}`);
       console.log(
         `Current sessions (${pool.size}): ${[...pool.keys()].join(', ')}`
       );
