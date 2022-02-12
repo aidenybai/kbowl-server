@@ -57,6 +57,9 @@ io.on('connection', (socket) => {
   socket.on('update-score', (data) => {
     io.emit('display-score', data);
   });
+  socket.on('update-timer', (data) => {
+    io.emit('display-timer', data);
+  });
 });
 
 app.use(compression());
