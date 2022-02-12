@@ -20,7 +20,7 @@ io.on('connection', (socket) => {
   socket.on('claim-room', (data) => {
     const canAdd = !pool.has(data.room);
     if (canAdd) pool.add(data.room);
-    io.emit('confirm-room', canAdd);
+    io.emit('confirm-room', { canAdd, id: socket.id });
   });
   socket.on('unclaim-room', (data) => {
     pool.delete(data.room);
