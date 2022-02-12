@@ -13,7 +13,7 @@ const io = require('socket.io')(server, {
 const pool = new Map();
 
 function getByValue(searchValue) {
-  for (const [key, value] of pool.entries()) {
+  for (const [key, value] of [...pool.entries()]) {
     if (value === searchValue) return key;
   }
 }
