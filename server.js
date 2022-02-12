@@ -13,7 +13,7 @@ const io = require('socket.io')(server, {
 const pool = new Map();
 
 function getByValue(map, searchValue) {
-  for (let [key, value] of map.entries()) {
+  for (const [key, value] of map.entries()) {
     if (value === searchValue) return key;
   }
 }
@@ -21,10 +21,12 @@ function getByValue(map, searchValue) {
 io.on('connection', (socket) => {
   console.log('A connection was established');
   socket.on('disconnect', () => {
-    if (pool.values().includes(socket.id)) {
+    if (Object.values(pool).includes(socket.id)) {
       pool.delete(getByValue(socket.io));
       console.log(`${socket.id} unclaimed ${getByValue(socket.io)}`);
-      console.log(`Current sessions (${pool.size}): ${[...pool].join(', ')}`);
+      console.log(
+        `Current sessions (${pool.size}): ${Object.keys(pool).join(', ')}`
+      );
     }
     console.log('A connection was disconnected');
   });
@@ -33,12 +35,16 @@ io.on('connection', (socket) => {
     if (canAdd) pool.set(data.room, data.id);
     io.emit('confirm-room', { canAdd, id: data.id });
     console.log(`${data.id} claimed ${data.room}`);
-    console.log(`Current sessions (${pool.size}): ${[...pool].join(', ')}`);
+    console.log(
+      `Current sessions (${pool.size}): ${Object.keys(pool).join(', ')}`
+    );
   });
   socket.on('unclaim-room', (data) => {
     pool.delete(data.room);
     console.log(`${data.id} unclaimed ${data.room}`);
-    console.log(`Current sessions (${pool.size}): ${[...pool].join(', ')}`);
+    console.log(
+      `Current sessions (${pool.size}): ${Object.keys(pool).join(', ')}`
+    );
   });
   socket.on('request-buzz', (data) => {
     io.emit('display-buzz', data);
