@@ -22,12 +22,12 @@ io.on('connection', (socket) => {
     if (canAdd) pool.add(data.room);
     io.emit('confirm-room', { canAdd, id: data.id });
     console.log(`${data.id} claimed ${data.room}`);
-    console.log(`Current sessions (${pool.size}): ${pool.join(', ')}`);
+    console.log(`Current sessions (${pool.size}): ${[...pool].join(', ')}`);
   });
   socket.on('unclaim-room', (data) => {
     pool.delete(data.room);
     console.log(`${data.id} unclaimed ${data.room}`);
-    console.log(`Current sessions (${pool.size}): ${pool.join(', ')}`);
+    console.log(`Current sessions (${pool.size}): ${[...pool].join(', ')}`);
   });
   socket.on('request-buzz', (data) => {
     io.emit('display-buzz', data);
